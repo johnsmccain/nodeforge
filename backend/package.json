@@ -239,6 +239,7 @@
     "validator": "^13.15.0",
     "validator.js": "^2.0.4",
     "vary": "^1.1.2",
+    "wagmi": "^2.14.16",
     "webidl-conversions": "^7.0.0",
     "whatwg-url": "^14.1.0",
     "which": "^2.0.2",
