@@ -4,7 +4,6 @@ const axios = require("axios");
 const router = express.Router();
 const Order = require("../models/Order");
 const nodemailer = require("nodemailer");
-const { custom } = require("wagmi");
 const validator = require('validator');
 
 // Initialize Nodemailer transporter (example using Gmail)
@@ -17,7 +16,6 @@ const transporter = nodemailer.createTransport({
 });
 
 const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY;
-const NOWPAYMENTS_API_URL = process.env.NOWPAYMENTS_API_URL;
 const YOUR_DOMAIN = process.env.DOMAIN;
 
 // Route to create a NowPayments crypto payment
