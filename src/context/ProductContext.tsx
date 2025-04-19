@@ -43,8 +43,8 @@ export type Product = {
     ram: RAMOption[];
     storage: StorageOption[];
   };
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 type ProductContextType = {

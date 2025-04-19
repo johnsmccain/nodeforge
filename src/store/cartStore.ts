@@ -20,7 +20,7 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       // Add new item or increment existing item
-      addItem: (product, config) => {
+      addItem: (product: Product, config) => {
         set((state) => {
           const existingItem = state.items.find(
             (item) =>

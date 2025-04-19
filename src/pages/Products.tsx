@@ -2,20 +2,9 @@ import ProductCard from "../components/product/ProductCard";
 import Pagination from "../components/product/Pagination";
 import { fetcher } from "../services/api";
 import { useEffect, useState } from "react";
+import { Product } from "../types";
+import ProductModal from "../components/product/ProductModal";
 
-// Define types for product and response to improve type safety
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  image: string;
-  specs: {
-    defaultRam: string;
-    defaultStorage: string;
-    defaultProcessor: string;
-  };
-};
 
 const PRODUCTS_PER_PAGE = 6;
 
@@ -39,8 +28,10 @@ export default function Products() {
         setIsLoading(false);
       });
   }, []);
-// console.log(products)
+  // console.log(products)
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [modalConfig, setModalConfig] = useState<any>(null);
 
   // Calculate the total number of pages based on products length
   const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
@@ -54,6 +45,16 @@ export default function Products() {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setModalConfig({
+      software: product.specs.software,
+      ram: product.specs.defaultSpecs.ram,
+      storage: product.specs.defaultSpecs.storage,
+      processor: product.specs.defaultSpecs.processor
+    });
+  };
+
 
   return (
     <main className="container mx-auto px-4 py-8 sm:py-16" id="products">
@@ -67,8 +68,11 @@ export default function Products() {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {currentProducts.map((product: Product) => (
-            <ProductCard key={product.id} product={product as any} />
-          ))}
+            <ProductCard
+              key={product.id}
+              product={product}
+              onClick={() => handleProductClick(product)}
+            />))}
         </div>
       )}
 
@@ -80,6 +84,13 @@ export default function Products() {
           onPageChange={handlePageChange}
         />
       )}
+
+      <ProductModal
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        config={modalConfig}
+        setConfig={setModalConfig}
+      />
     </main>
   );
 }

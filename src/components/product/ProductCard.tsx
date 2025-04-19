@@ -1,4 +1,4 @@
-import {  useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Eye } from 'lucide-react';
 import { useCartStore } from '../../store/cartStore';
@@ -7,19 +7,22 @@ import ProductOptions from './ProductOptions';
 import Product3DView from './Product3DView';
 import Cloudnary from '../cloudnary/Cloudnary';
 import { calculateTotalPrice } from '../../utils/calculateTotalPrice';
+import { Product } from '../../types';
+// import { Product } from '../../context/ProductContext';
 
 interface ProductCardProps {
-  product: any;
+  product: Product;
+  onClick: () => void;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, onClick }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
   console.log(product)
   const [config, setConfig] = useState({
     software: product.specs.software,
-    ram: product.specs.ram ,
-    storage: product.specs.storage ,
-    processor: product.specs.processor
+    ram: product.specs.defaultSpecs.ram,
+    storage: product.specs.defaultSpecs.storage,
+    processor: product.specs.defaultSpecs.processor
   });
   const [show3D, setShow3D] = useState(false);
 
@@ -29,13 +32,13 @@ export default function ProductCard({ product }: ProductCardProps) {
   useEffect(() => {
     setConfig({
       software: product.specs.software,
-      ram: product.specs.defaultSpecs.ram ,
-      storage: product.specs.defaultSpecs.storage ,
+      ram: product.specs.defaultSpecs.ram,
+      storage: product.specs.defaultSpecs.storage,
       processor: product.specs.defaultSpecs.processor
-    }); 
+    });
   }, [product])
 
-  const price = calculatePrice(product.price, config);
+  const price = calculatePrice(product.basePrice, config);
   const totalPrice = calculateTotalPrice(product, config);
 
   console.log(product)
@@ -51,11 +54,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <Product3DView />
         ) : (
           <div className="group">
-            {/* <img 
-              src={product.image} 
-              alt={product.name} 
-              className="w-full h-[400px] object-cover transform group-hover:scale-110 transition-transform duration-300" 
-            /> */}
+
             <Cloudnary cldImg={product.image} format="auto" quality="auto" width={500} height={500} />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -85,10 +84,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         animate={{ height: 'auto' }}
         transition={{ duration: 0.3 }}
       >
-        <h3 className="text-xl font-bold mb-2">{product.name}</h3>
-        <p className="text-gray-600 mb-4">{`${product.description.length > 100 ? `${product.description.slice(0, 100)}...` : product.description.slice(0, 100)}`}</p>
+        <div className="cursor-pointer" onClick={onClick}>
+          <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+          <p className="text-gray-600 mb-4">{`${product.description.length > 100 ? `${product.description.slice(0, 100)}...more` : product.description.slice(0, 100)}`}</p>
+        </div>
 
-        <ProductOptions config={config} onChange={setConfig} options={product.options}/>
+        <ProductOptions config={config} onChange={setConfig} options={product.options} />
 
         <div className="mt-6 flex items-center justify-between">
           <motion.span

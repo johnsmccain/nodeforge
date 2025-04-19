@@ -76,7 +76,7 @@ export default function Stats() {
                     from={0} 
                     to={stat.maxValue!} 
                     suffix={stat.suffix} 
-                    duration={1.5} 
+                    duration={index + 1} 
                     decimals={stat.value.includes('.') ? 1 : 0}
                   />
                 ) : (
