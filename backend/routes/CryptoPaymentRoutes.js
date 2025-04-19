@@ -4,6 +4,7 @@ const axios = require("axios");
 const router = express.Router();
 const Order = require("../models/Order");
 const nodemailer = require("nodemailer");
+const { custom } = require("wagmi");
 const validator = require('validator');
 
 // Initialize Nodemailer transporter (example using Gmail)
@@ -16,13 +17,16 @@ const transporter = nodemailer.createTransport({
 });
 
 const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY;
+const NOWPAYMENTS_API_URL = process.env.NOWPAYMENTS_API_URL;
 const YOUR_DOMAIN = process.env.DOMAIN;
 
 // Route to create a NowPayments crypto payment
 router.post("/create-crypto-payment", async (req, res) => {
   try {
+
+
     // console.log("Received request to create crypto payment:", req.body);
-    const { line_items, order_description, shippingInfo, pay_currency, customer } = req.body;
+    const { line_items, order_description, shippingInfo, pay_currency, customer, products } = req.body;
 
     if (!shippingInfo || !customer) {
       console.error("Missing shippingInfo object");
@@ -42,7 +46,8 @@ router.post("/create-crypto-payment", async (req, res) => {
       return sum + (item.price_data.unit_amount / 100) * (item.quantity || 1);
     }, 0);
 
-    console.log("Total amount calculated in USD:", totalAmountUSD);
+    // console.log("Total amount calculated in USD:", totalAmountUSD);
+
 
     // Create an order with 'Pending' status
     const order = new Order({
@@ -50,6 +55,7 @@ router.post("/create-crypto-payment", async (req, res) => {
       order_description,
       shippingInfo,
       customer,
+      products,
       totalPrice: totalAmountUSD,
       orderStatus: "pending",
       paymentMethod: "crypto",
@@ -60,7 +66,7 @@ router.post("/create-crypto-payment", async (req, res) => {
     });
 
     const savedOrder = await order.save();
-    console.log("Order saved successfully:", savedOrder);
+    // console.log("Order saved successfully:", savedOrder);
 
     // Create a payment request on NowPayments
     const response = await axios.post(
@@ -83,7 +89,6 @@ router.post("/create-crypto-payment", async (req, res) => {
       }
     );
 
-    console.log("NowPayments response:", response.data);
 
     if (!response.data || !response.data.id) {
       console.error("Failed to create crypto payment", response.data);
