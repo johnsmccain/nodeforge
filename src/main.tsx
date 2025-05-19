@@ -14,16 +14,16 @@ if (!rootElement) throw new Error('Failed to find the root element');
 const queryClient = new QueryClient();
 createRoot(rootElement).render(
   <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <ProductProvider>
-          <OrderProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-    <App />
-            </TooltipProvider>
-          </OrderProvider>
-        </ProductProvider>
-      </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ProductProvider>
+        <OrderProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <App />
+          </TooltipProvider>
+        </OrderProvider>
+      </ProductProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

@@ -4,30 +4,16 @@ import { fetcher } from "../services/api";
 import { useEffect, useState } from "react";
 import { Product } from "../types";
 import ProductModal from "../components/product/ProductModal";
+import { useProductStore } from "../store/productStore";
 
 
 const PRODUCTS_PER_PAGE = 6;
 
 export default function Products() {
-  const [products, setProducts] = useState<Product[]>([]); // Added TypeScript type annotation
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
-
+  // const [products, setProducts] = useState<Product[]>([]); // Added TypeScript type annotation
+  const { products, isLoading} = useProductStore();
   // Fetch products when the component mounts
-  useEffect(() => {
-    fetcher("/products")
-      .then((res) => {
-        if (Array.isArray(res)) {
-          setProducts(res);
-        } else {
-          console.error("Unexpected response format:", res);
-        }
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-        setIsLoading(false);
-      });
-  }, []);
+
   // console.log(products)
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);

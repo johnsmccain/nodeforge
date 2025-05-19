@@ -17,8 +17,30 @@ import { AuthProvider } from "./context/AuthContext";
 import RequireAuth from "./components/auth/RequireAuth";
 import Login from "./pages/dashboard/Login";
 import FAQPage from "./pages/FAQ";
+import { useEffect } from "react";
+import { useProductStore } from "./store/productStore";
+import { fetcher } from "./services/api";
+
 
 function App() {
+
+    const { products, setProducts, updateLoading} = useProductStore();
+
+    useEffect(() => {
+      fetcher("/products")
+        .then((res) => {
+          if (Array.isArray(res)) {
+            setProducts(res);
+          } else {
+            console.error("Unexpected response format:", res);
+          }
+          updateLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching products:", error);
+          updateLoading(false);
+        });
+    }, [products, setProducts]);
   return (
     <AuthProvider>
       <Router>

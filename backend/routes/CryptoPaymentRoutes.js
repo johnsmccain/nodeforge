@@ -6,6 +6,8 @@ const Order = require("../models/Order");
 const nodemailer = require("nodemailer");
 const { custom } = require("wagmi");
 const validator = require('validator');
+const crypto = require('crypto');
+const apiKey = process.env.WALLET_API_KEY;
 
 // Initialize Nodemailer transporter (example using Gmail)
 const transporter = nodemailer.createTransport({
@@ -69,17 +71,37 @@ router.post("/create-crypto-payment", async (req, res) => {
     // console.log("Order saved successfully:", savedOrder);
 
     // Create a payment request on NowPayments
+    // const response = await axios.post(
+    //   "httemailemailps://api.nowpayments.io/v1/invoice",
+    //   {
+    //     price_amount: totalAmountUSD,
+    //     price_currency: "usd",
+    //     pay_currency: pay_currency || "ethbase",
+    //     order_id: savedOrder._id.toString(),
+    //     order_description: JSON.stringify(order_description),
+    //     ipn_callback_url: `${YOUR_DOMAIN}/api/crypto/webhook`,
+    //     success_url: `${YOUR_DOMAIN}/success`,
+    //     cancel_url: `${YOUR_DOMAIN}/canceled`,
+    //   },
+    //   {
+    //     headers: {
+    //       "x-api-key": NOWPAYMENTS_API_KEY,
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
     const response = await axios.post(
-      "https://api.nowpayments.io/v1/invoice",
+      "https://api.blockradar.co/v1/payment_links",
       {
-        price_amount: totalAmountUSD,
-        price_currency: "usd",
-        pay_currency: pay_currency || "ethbase",
-        order_id: savedOrder._id.toString(),
-        order_description: JSON.stringify(order_description),
-        ipn_callback_url: `${YOUR_DOMAIN}/api/crypto/webhook`,
-        success_url: `${YOUR_DOMAIN}/success`,
-        cancel_url: `${YOUR_DOMAIN}/canceled`,
+        slug: savedOrder._id.toString(),
+        amount: totalAmountUSD,
+        metadata: JSON.stringify(order_description),
+        redirectUrl: `${YOUR_DOMAIN}/api/crypto/webhook`,
+        successMessage: "Payment successful",
+        // price_currency: "usd",
+        // pay_currency: pay_currency || "ethbase",
+        // success_url: `${YOUR_DOMAIN}/success`,
+        // cancel_url: `${YOUR_DOMAIN}/canceled`,
       },
       {
         headers: {
@@ -177,4 +199,17 @@ router.post("/webhook", async (req, res) => {
   }
 });
 
+
+// // Webhook to handle BlockRadar payment status updates
+// const apiSecret = process.env.BLOCKRADAR_API_SECRET;
+// const blockRadarUrl = process.env.BLOCKRADAR_URL || "https://api.blockradar.io/v1/webhook";
+// const blockRadarWebhookUrl = process.env.BLOCKRADAR_WEBHOOK_URL || "https://yourdomain.com/my/webhook/url";
+// const blockRadarWebhookSecret = process.env.BLOCKRADAR_WEBHOOK
+// Using Express
+app.post("/my/webhook/url", function(req, res) {
+  // Retrieve the request's body
+  const event = req.body;
+  // Do something with event
+  res.send(200);
+});
 module.exports = router;
