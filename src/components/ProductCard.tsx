@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Settings, HardDrive, Cpu, ShoppingBag, Database } from "lucide-react";
-import type { Product, NodeConfig } from "../types/index";
+import type {  NodeConfig } from "../types/index";
 import { useCartStore } from "../store/cartStore";
-import { calculatePrice } from "../utils/price";
+// import { calculatePrice } from "../utils/price";
 
-interface ProductCardProps {
-  product: Product;
-}
+// interface ProductCardProps {
+//   product: Product;
+// }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product }: any) {
   const addItem = useCartStore((state) => state.addItem);
   const [config, setConfig] = useState<NodeConfig>({
     software: "Dappnode",
@@ -22,8 +22,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   const price = product.price;
-  const pricec = calculatePrice(price as number, config);
-  console.log(pricec);
+  // const pricec = calculatePrice(price as number, config);
+  // console.log(pricec);
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105">

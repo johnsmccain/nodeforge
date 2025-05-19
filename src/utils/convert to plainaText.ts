@@ -1,7 +1,7 @@
-import { CartItem } from "../types";
+// import { CartItem } from "../types";
 
   
-export  function retrieveSystemInfoAsText(items: CartItem[]): string {
+export  function retrieveSystemInfoAsText(items: any[]): string {
     let result = "";
   
     items.forEach((item) => {

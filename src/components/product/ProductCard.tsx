@@ -17,7 +17,6 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, onClick }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
-  console.log(product)
   const [config, setConfig] = useState({
     software: product.specs.software,
     ram: product.specs.defaultSpecs.ram,
@@ -41,7 +40,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
   const price = calculatePrice(product.basePrice, config);
   const totalPrice = calculateTotalPrice(product, config);
 
-  console.log(product)
+  // console.log(product)
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

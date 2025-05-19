@@ -24,7 +24,7 @@ import { fetcher } from "./services/api";
 
 function App() {
 
-    const { products, setProducts, updateLoading} = useProductStore();
+    const { setProducts, updateLoading} = useProductStore();
 
     useEffect(() => {
       fetcher("/products")
@@ -40,7 +40,8 @@ function App() {
           console.error("Error fetching products:", error);
           updateLoading(false);
         });
-    }, [products, setProducts]);
+    }, []);
+
   return (
     <AuthProvider>
       <Router>

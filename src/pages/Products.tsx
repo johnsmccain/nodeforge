@@ -1,7 +1,6 @@
 import ProductCard from "../components/product/ProductCard";
 import Pagination from "../components/product/Pagination";
-import { fetcher } from "../services/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Product } from "../types";
 import ProductModal from "../components/product/ProductModal";
 import { useProductStore } from "../store/productStore";

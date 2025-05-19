@@ -43,8 +43,8 @@ interface ProductOption {
     }
   
     let total = product.basePrice;
-    console.log(product)
-    console.log(selectedOptions)
+    // console.log(product)
+    // console.log(selectedOptions)
     // Helper function to find and validate options
     const addOptionPrice = (
       optionType: keyof ProductOptions,

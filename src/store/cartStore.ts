@@ -51,7 +51,7 @@ export const useCartStore = create<CartStore>()(
                 ...product,
                 config,
                 quantity: 1,
-                totalPrice: price,
+                totalPrice: price, 
               },
             ],
           };

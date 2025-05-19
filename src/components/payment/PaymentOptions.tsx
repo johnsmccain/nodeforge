@@ -136,7 +136,7 @@ export default function PaymentOptions({ amount, onSuccess }: PaymentOptionsProp
     zipCode: shippingDetails?.zipCode,
     country: shippingDetails?.country
   }
-  console.log(items);
+  // console.log(items);
   // const order_description = `${retrieveSystemInfoAsText(items)} Total Price: ${getTotalPrice()}`;
 
   const handleProceedToShipping = (method: "card" | "crypto") => {
